@@ -103,6 +103,7 @@ components:
           type: string
         isActive:
           type: boolean
+          default: true
 
     LessonPayload:
       type: object

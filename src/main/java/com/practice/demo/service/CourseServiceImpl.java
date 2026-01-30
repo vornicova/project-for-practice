@@ -19,29 +19,30 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
+    private final CourseMapper courseMapper;
 
     @Override
     @Transactional
     public GetCoursePayload create(CreateCoursePayload payload) {
-        CourseEntity entity = CourseMapper.fromCreatePayload(payload);
+        CourseEntity entity = courseMapper.fromCreatePayload(payload);
 
         CourseEntity saved = courseRepository.save(entity);
-        return CourseMapper.toGetPayload(saved);
+        return courseMapper.toGetPayload(saved);
     }
 
     @Override
     public GetCoursePayload getById(Long id) {
         CourseEntity entity = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException("Course with id=" + id + " was not found"));
+                .orElseThrow(() -> new CourseNotFoundException(id));
 
-        return CourseMapper.toGetPayload(entity);
+        return courseMapper.toGetPayload(entity);
     }
 
     @Override
     public List<GetCoursePayload> getAll() {
         return courseRepository.findAll()
                 .stream()
-                .map(CourseMapper::toGetPayload)
+                .map(courseMapper::toGetPayload)
                 .toList();
     }
 
@@ -49,21 +50,8 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public GetCoursePayload update(Long id, UpdateCoursePayload payload) {
         CourseEntity entity = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException("Course with id=" + id + " was not found"));
-
-
-        if (payload.getTitle() != null) {
-            entity.setTitle(payload.getTitle());
-        }
-        if (payload.getDescription() != null) {
-            entity.setDescription(payload.getDescription());
-        }
-        if (payload.getIsActive() != null) {
-            entity.setActive(payload.getIsActive());
-        }
-
-        return CourseMapper.toGetPayload(
-                courseRepository.save(entity)
-        );
+                .orElseThrow(() -> new CourseNotFoundException(id));
+        CourseEntity updatedEntity = courseMapper.getUpdatedEntityFromPayload(entity, payload);
+        return courseMapper.toGetPayload(updatedEntity);
     }
 }
