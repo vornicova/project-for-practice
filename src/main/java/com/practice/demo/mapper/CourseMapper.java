@@ -10,14 +10,7 @@ import java.util.List;
 
 @Component
 public final class CourseMapper {
-
-    private CourseMapper() {
-    }
-
     public GetCoursePayload toGetPayload(CourseEntity entity) {
-        if (entity == null) {
-            return null;
-        }
 
         return new GetCoursePayload()
                 .id(entity.getId())
