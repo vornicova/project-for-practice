@@ -4,6 +4,8 @@ import com.practice.demo.entity.CourseEntity;
 import com.practice.demo.exception.CourseNotFoundException;
 import com.practice.demo.mapper.CourseMapper;
 import com.practice.demo.repository.CourseRepository;
+import com.practice.demo.testdata.CourseEntityFactory;
+import com.practice.demo.testdata.CoursePayloadFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CourseServiceImplTest {
+
     @Mock
     private CourseRepository courseRepository;
 
@@ -34,28 +37,10 @@ class CourseServiceImplTest {
 
     @Test
     void shouldCreateCourse() {
-        CreateCoursePayload payload = new CreateCoursePayload()
-                .title("Java")
-                .description("Basics");
-
-        CourseEntity entity = CourseEntity.builder()
-                .title("Java")
-                .description("Basics")
-                .isActive(true)
-                .build();
-
-        CourseEntity savedEntity = CourseEntity.builder()
-                .id(1L)
-                .title("Java")
-                .description("Basics")
-                .isActive(true)
-                .build();
-
-        GetCoursePayload response = new GetCoursePayload()
-                .id(1L)
-                .title("Java")
-                .description("Basics")
-                .isActive(true);
+        CreateCoursePayload payload = CoursePayloadFactory.createCoursePayload();
+        CourseEntity entity = CourseEntityFactory.defaultCourse();
+        CourseEntity savedEntity = CourseEntityFactory.defaultCourse();
+        GetCoursePayload response = CoursePayloadFactory.getCoursePayload();
 
         when(courseMapper.fromCreatePayload(payload)).thenReturn(entity);
         when(courseRepository.save(entity)).thenReturn(savedEntity);
@@ -63,8 +48,8 @@ class CourseServiceImplTest {
 
         GetCoursePayload result = courseService.create(payload);
 
-        assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getTitle()).isEqualTo("Java");
+        assertThat(result.getId()).isEqualTo(response.getId());
+        assertThat(result.getTitle()).isEqualTo(response.getTitle());
         assertThat(result.getIsActive()).isTrue();
 
         verify(courseRepository).save(entity);
@@ -72,29 +57,22 @@ class CourseServiceImplTest {
 
     @Test
     void shouldReturnCourseById() {
-        Long id = 1L;
-
-        CourseEntity entity = CourseEntity.builder()
-                .id(id)
-                .title("Java")
-                .build();
-
-        GetCoursePayload payload = new GetCoursePayload()
-                .id(id)
-                .title("Java");
+        long id = 1L;
+        CourseEntity entity = CourseEntityFactory.defaultCourse();
+        GetCoursePayload payload = CoursePayloadFactory.getCoursePayload();
 
         when(courseRepository.findById(id)).thenReturn(Optional.of(entity));
         when(courseMapper.toGetPayload(entity)).thenReturn(payload);
 
         GetCoursePayload result = courseService.getById(id);
 
-        assertThat(result.getId()).isEqualTo(id);
-        assertThat(result.getTitle()).isEqualTo("Java");
+        assertThat(result.getId()).isEqualTo(payload.getId());
+        assertThat(result.getTitle()).isEqualTo(payload.getTitle());
     }
 
     @Test
     void shouldThrowExceptionWhenCourseNotFound() {
-        Long id = 99L;
+        long id = 99L;
         when(courseRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> courseService.getById(id))
@@ -104,26 +82,24 @@ class CourseServiceImplTest {
 
     @Test
     void shouldReturnAllCourses() {
-        CourseEntity firstCourse = CourseEntity.builder()
-                .id(1L)
-                .title("Java")
-                .build();
-        CourseEntity secondCourse = CourseEntity.builder()
+        CourseEntity first = CourseEntityFactory.defaultCourse();
+        CourseEntity second = CourseEntity.builder()
                 .id(2L)
                 .title("C#")
+                .description("Basics")
+                .isActive(true)
                 .build();
-        List<CourseEntity> entities = List.of(firstCourse, secondCourse);
 
-        GetCoursePayload firstPayload = new GetCoursePayload()
-                .id(1L)
-                .title("Java");
+        GetCoursePayload firstPayload = CoursePayloadFactory.getCoursePayload();
         GetCoursePayload secondPayload = new GetCoursePayload()
                 .id(2L)
-                .title("C#");
+                .title("C#")
+                .description("Basics")
+                .isActive(true);
 
-        when(courseRepository.findAll()).thenReturn(entities);
-        when(courseMapper.toGetPayload(firstCourse)).thenReturn(firstPayload);
-        when(courseMapper.toGetPayload(secondCourse)).thenReturn(secondPayload);
+        when(courseRepository.findAll()).thenReturn(List.of(first, second));
+        when(courseMapper.toGetPayload(first)).thenReturn(firstPayload);
+        when(courseMapper.toGetPayload(second)).thenReturn(secondPayload);
 
         List<GetCoursePayload> result = courseService.getAll();
 
@@ -134,39 +110,29 @@ class CourseServiceImplTest {
 
     @Test
     void shouldUpdateCourse() {
-        Long id = 1L;
+        long id = 1L;
 
-        UpdateCoursePayload payload = new UpdateCoursePayload()
-                .title("Advanced Java");
+        UpdateCoursePayload payload = CoursePayloadFactory.updateCoursePayload();
+        CourseEntity existing = CourseEntityFactory.defaultCourse();
+        CourseEntity updated = CourseEntityFactory.updatedCourse();
 
-        CourseEntity entity = CourseEntity.builder()
-                .id(id)
-                .title("Java")
-                .build();
+        GetCoursePayload response = CoursePayloadFactory.updatedGetCoursePayload();
 
-        CourseEntity updatedEntity = CourseEntity.builder()
-                .id(id)
-                .title("Advanced Java")
-                .build();
-
-        GetCoursePayload response = new GetCoursePayload()
-                .id(id)
-                .title("Advanced Java");
-
-        when(courseRepository.findById(id)).thenReturn(Optional.of(entity));
-        when(courseMapper.getUpdatedEntityFromPayload(entity, payload)).thenReturn(updatedEntity);
-        when(courseMapper.toGetPayload(updatedEntity)).thenReturn(response);
+        when(courseRepository.findById(id)).thenReturn(Optional.of(existing));
+        when(courseMapper.getUpdatedEntityFromPayload(existing, payload)).thenReturn(updated);
+        when(courseMapper.toGetPayload(updated)).thenReturn(response);
 
         GetCoursePayload result = courseService.update(id, payload);
+
         assertThat(result.getTitle()).isEqualTo("Advanced Java");
+        assertThat(result.getIsActive()).isFalse();
     }
 
     @Test
     void shouldThrowExceptionWhenUpdatingMissingCourse() {
         when(courseRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> courseService.update(1L, new UpdateCoursePayload()))
+        assertThatThrownBy(() -> courseService.update(1L, CoursePayloadFactory.updateCoursePayload()))
                 .isInstanceOf(CourseNotFoundException.class);
     }
 }
-
