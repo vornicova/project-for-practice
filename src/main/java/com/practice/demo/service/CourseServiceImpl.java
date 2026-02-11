@@ -28,6 +28,7 @@ public class CourseServiceImpl implements CourseService {
 
         CourseEntity saved = courseRepository.save(entity);
         return courseMapper.toGetPayload(saved);
+
     }
 
     @Override
