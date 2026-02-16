@@ -21,7 +21,7 @@ public class CourseEntity {
     private Long id;
 
     @Builder.Default
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     private List<LessonEntity> lessons = new ArrayList<>();
 
     @Column(nullable = false)

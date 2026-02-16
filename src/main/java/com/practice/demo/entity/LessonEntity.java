@@ -1,17 +1,15 @@
 package com.practice.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "t_lessons")
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class LessonEntity {
 
     @Id
@@ -22,10 +20,11 @@ public class LessonEntity {
 
     private String content;
 
-    @Column(name = "is_active")
+    @Builder.Default
+    @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "course_id", nullable = false)
     private CourseEntity course;
 }

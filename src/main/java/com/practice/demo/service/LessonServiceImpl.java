@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 import org.openapitools.model.CreateLessonPayload;
 import org.openapitools.model.GetLessonPayload;
 import org.openapitools.model.UpdateLessonPayload;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LessonServiceImpl implements LessonService {
 
     private final LessonRepository repository;
@@ -29,6 +31,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
+    @Transactional
     public GetLessonPayload create(CreateLessonPayload payload) {
         CourseEntity course = courseRepository.findById(payload.getCourseId())
                 .orElseThrow(() -> new CourseNotFoundException(payload.getCourseId()));
@@ -41,26 +44,30 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
+    @Transactional
     public GetLessonPayload update(Long id, UpdateLessonPayload payload) {
         LessonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new LessonNotFoundException(id));
 
         mapper.updateEntity(payload, entity);
 
-        if (payload.getCourseId() != null) {
+        if (payload.getCourseId() != null &&
+                !payload.getCourseId().equals(entity.getCourse().getId())) {
+
             CourseEntity course = courseRepository.findById(payload.getCourseId())
                     .orElseThrow(() -> new CourseNotFoundException(payload.getCourseId()));
+
             entity.setCourse(course);
         }
 
-        return mapper.toPayload(repository.save(entity));
+        return mapper.toPayload(entity);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         LessonEntity entity = repository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new LessonNotFoundException(id));
         entity.setIsActive(false);
-        repository.save(entity);
     }
 }

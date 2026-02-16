@@ -19,6 +19,5 @@ public interface LessonMapper {
 
     @Mapping(target = "course", ignore = true)
     @Mapping(target = "id", ignore = true)
-
     void updateEntity(UpdateLessonPayload payload, @MappingTarget LessonEntity entity);
 }

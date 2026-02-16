@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
 	</properties>
 	<dependencies>
         <dependency>
@@ -96,8 +97,8 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-            <version>1.6.3</version>
-            <scope>compile</scope>
+            <version>${mapstruct.version}</version>
+            <scope>provided</scope>
         </dependency>
 	</dependencies>
 
