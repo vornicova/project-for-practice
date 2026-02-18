@@ -31,9 +31,9 @@ class CourseOperationsImplTest {
         List<GetCoursePayload> result = courseOperations.filterByActiveStatus(courses, true);
 
         assertEquals(CourseOperationsTestData.MIXED_COURSES_ACTIVE_COUNT, result.size(),
-            "Should have correct number of active courses");
+                "Should have correct number of active courses");
         assertTrue(result.stream().allMatch(c -> c.getIsActive() != null && c.getIsActive()),
-            "All courses should be active");
+                "All courses should be active");
     }
 
     @Test
@@ -43,9 +43,9 @@ class CourseOperationsImplTest {
         List<GetCoursePayload> result = courseOperations.filterByActiveStatus(courses, false);
 
         assertEquals(CourseOperationsTestData.MIXED_COURSES_INACTIVE_COUNT, result.size(),
-            "Should have correct number of inactive courses");
+                "Should have correct number of inactive courses");
         assertTrue(result.stream().allMatch(c -> c.getIsActive() != null && !c.getIsActive()),
-            "All courses should be inactive");
+                "All courses should be inactive");
     }
 
     @Test
@@ -98,9 +98,9 @@ class CourseOperationsImplTest {
         List<GetCoursePayload> result = courseOperations.filterCoursesWithLessonsMoreThan(courses, 5);
 
         assertEquals(CourseOperationsTestData.VARYING_LESSONS_MORE_THAN_5_COUNT_CORRECT, result.size(),
-            "Should have correct number of courses with more than 5 lessons");
+                "Should have correct number of courses with more than 5 lessons");
         assertTrue(result.stream().allMatch(c -> c.getLessons().size() > 5),
-            "All courses should have more than 5 lessons");
+                "All courses should have more than 5 lessons");
     }
 
     @Test
@@ -119,7 +119,7 @@ class CourseOperationsImplTest {
         List<GetCoursePayload> result = courseOperations.filterCoursesWithLessonsMoreThan(courses, 0);
 
         assertEquals(CourseOperationsTestData.VARYING_LESSONS_MORE_THAN_0_COUNT, result.size(),
-            "All courses should have more than 0 lessons");
+                "All courses should have more than 0 lessons");
     }
 
     // ============== mapToTitles Tests ==============
@@ -131,7 +131,7 @@ class CourseOperationsImplTest {
         List<String> result = courseOperations.mapToTitles(courses);
 
         assertEquals(CourseOperationsTestData.MIXED_COURSES_COUNT, result.size(),
-            "Should have correct number of titles");
+                "Should have correct number of titles");
         assertTrue(result.contains("Java Basics"), "Should contain 'Java Basics'");
         assertTrue(result.contains("Advanced Java"), "Should contain 'Advanced Java'");
     }
@@ -144,7 +144,7 @@ class CourseOperationsImplTest {
 
         assertEquals(1, result.size(), "Should have 1 title");
         assertEquals(CourseOperationsTestData.SINGLE_COURSE_TITLE, result.get(0),
-            "Should be correct title");
+                "Should be correct title");
     }
 
     @Test
@@ -168,7 +168,7 @@ class CourseOperationsImplTest {
         assertEquals(expected.size(), result.size(), "Should have correct number of courses");
         for (int i = 0; i < expected.size(); i++) {
             assertEquals(expected.get(i).getId(), result.get(i).getId(),
-                "Course at index " + i + " should have correct id");
+                    "Course at index " + i + " should have correct id");
         }
     }
 
@@ -180,7 +180,7 @@ class CourseOperationsImplTest {
 
         assertEquals(1, result.size(), "Should have 1 course");
         assertEquals(CourseOperationsTestData.SINGLE_COURSE_ID, result.get(0).getId(),
-            "Course should have correct id");
+                "Course should have correct id");
     }
 
     @Test
@@ -204,9 +204,9 @@ class CourseOperationsImplTest {
         assertEquals(expected.size(), result.size(), "Should have correct number of courses");
         for (int i = 0; i < expected.size(); i++) {
             assertEquals(expected.get(i).getId(), result.get(i).getId(),
-                "Course at index " + i + " should have correct id");
+                    "Course at index " + i + " should have correct id");
             assertEquals(expected.get(i).getTitle(), result.get(i).getTitle(),
-                "Course at index " + i + " should have correct title");
+                    "Course at index " + i + " should have correct title");
         }
     }
 
@@ -217,7 +217,7 @@ class CourseOperationsImplTest {
         List<GetCoursePayload> result = courseOperations.sortByTitleAscAndLessonsDesc(courses);
 
         assertEquals(CourseOperationsTestData.VARYING_LESSONS_COURSES_COUNT, result.size(),
-            "Should have correct number of courses");
+                "Should have correct number of courses");
         assertNotNull(result.get(0), "Result should not be null");
     }
 
@@ -230,7 +230,7 @@ class CourseOperationsImplTest {
         long result = courseOperations.countActiveCourses(courses);
 
         assertEquals(CourseOperationsTestData.MIXED_COURSES_ACTIVE_COUNT, result,
-            "Should count correct number of active courses");
+                "Should count correct number of active courses");
     }
 
     @Test
@@ -240,7 +240,7 @@ class CourseOperationsImplTest {
         long result = courseOperations.countActiveCourses(courses);
 
         assertEquals(CourseOperationsTestData.ALL_ACTIVE_COURSES_COUNT, result,
-            "Should count correct number of active courses");
+                "Should count correct number of active courses");
     }
 
     @Test
@@ -261,7 +261,7 @@ class CourseOperationsImplTest {
         long result = courseOperations.countCoursesByLessonCount(courses, 5);
 
         assertEquals(CourseOperationsTestData.VARYING_LESSONS_MIN_5_COUNT, result,
-            "Should count courses with at least 5 lessons");
+                "Should count courses with at least 5 lessons");
     }
 
     @Test
@@ -280,7 +280,7 @@ class CourseOperationsImplTest {
         long result = courseOperations.countCoursesByLessonCount(courses, 0);
 
         assertEquals(CourseOperationsTestData.VARYING_LESSONS_COURSES_COUNT, result,
-            "Should count all courses");
+                "Should count all courses");
     }
 
     // ============== countLessons Tests ==============
@@ -292,7 +292,7 @@ class CourseOperationsImplTest {
         long result = courseOperations.countLessons(courses);
 
         assertEquals(CourseOperationsTestData.VARYING_LESSONS_TOTAL_LESSONS, result,
-            "Should count correct total lessons");
+                "Should count correct total lessons");
     }
 
     @Test
@@ -302,7 +302,7 @@ class CourseOperationsImplTest {
         long result = courseOperations.countLessons(courses);
 
         assertEquals(CourseOperationsTestData.MIXED_COURSES_TOTAL_LESSONS, result,
-            "Should count correct total lessons");
+                "Should count correct total lessons");
     }
 
     @Test
@@ -382,8 +382,14 @@ class CourseOperationsImplTest {
 
         assertNotNull(result, "Should find a course");
         assertNotNull(result.getTitle(), "Title should not be null");
-        assertEquals(CourseOperationsTestData.LONGEST_TITLE_LENGTH, result.getTitle().length(),
-            "Title should have correct length");
+
+        int maxLength = courses.stream()
+                .mapToInt(course -> course.getTitle() != null ? course.getTitle().length() : 0)
+                .max()
+                .orElse(0);
+
+        assertEquals(maxLength, result.getTitle().length(),
+                "Title should have correct length");
     }
 
     @Test
@@ -394,7 +400,7 @@ class CourseOperationsImplTest {
 
         assertNotNull(result, "Should find the course");
         assertEquals(CourseOperationsTestData.SINGLE_COURSE_TITLE, result.getTitle(),
-            "Should be correct title");
+                "Should be correct title");
     }
 
     @Test
@@ -416,9 +422,9 @@ class CourseOperationsImplTest {
 
         assertNotNull(result, "Should find a course");
         assertEquals(CourseOperationsTestData.COURSE_WITH_MOST_LESSONS_TITLE, result.getTitle(),
-            "Should be correct course");
+                "Should be correct course");
         assertEquals(CourseOperationsTestData.COURSE_WITH_MOST_LESSONS_COUNT, result.getLessons().size(),
-            "Should have correct number of lessons");
+                "Should have correct number of lessons");
     }
 
     @Test
@@ -429,7 +435,7 @@ class CourseOperationsImplTest {
 
         assertNotNull(result, "Should find the course");
         assertEquals(CourseOperationsTestData.SINGLE_COURSE_ID, result.getId(),
-            "Should be the single course");
+                "Should be the single course");
     }
 
     @Test
@@ -453,9 +459,9 @@ class CourseOperationsImplTest {
         assertTrue(result.containsKey(true), "Should have active group");
         assertTrue(result.containsKey(false), "Should have inactive group");
         assertEquals(CourseOperationsTestData.MIXED_COURSES_ACTIVE_COUNT, result.get(true).size(),
-            "Should have correct number of active courses");
+                "Should have correct number of active courses");
         assertEquals(CourseOperationsTestData.MIXED_COURSES_INACTIVE_COUNT, result.get(false).size(),
-            "Should have correct number of inactive courses");
+                "Should have correct number of inactive courses");
     }
 
     @Test
@@ -467,7 +473,7 @@ class CourseOperationsImplTest {
         assertEquals(1, result.size(), "Should have 1 group");
         assertTrue(result.containsKey(true), "Should have active group");
         assertEquals(CourseOperationsTestData.ALL_ACTIVE_COURSES_COUNT, result.get(true).size(),
-            "Should have correct number of active courses");
+                "Should have correct number of active courses");
     }
 
     @Test
@@ -489,9 +495,9 @@ class CourseOperationsImplTest {
         List<GetCoursePayload> result = courseOperations.filterByMinIdAndCollect(courses, 10L);
 
         assertEquals(CourseOperationsTestData.VARIOUS_IDS_GREATER_EQUAL_10_COUNT, result.size(),
-            "Should have correct number of courses with id >= 10");
+                "Should have correct number of courses with id >= 10");
         assertTrue(result.stream().allMatch(c -> c.getId() != null && c.getId() >= 10),
-            "All courses should have id >= 10");
+                "All courses should have id >= 10");
     }
 
     @Test
@@ -501,7 +507,7 @@ class CourseOperationsImplTest {
         List<GetCoursePayload> result = courseOperations.filterByMinIdAndCollect(courses, 100L);
 
         assertEquals(CourseOperationsTestData.VARIOUS_IDS_GREATER_EQUAL_100_COUNT, result.size(),
-            "Should return correct number of courses");
+                "Should return correct number of courses");
     }
 
     @Test
@@ -511,7 +517,7 @@ class CourseOperationsImplTest {
         List<GetCoursePayload> result = courseOperations.filterByMinIdAndCollect(courses, 1L);
 
         assertEquals(CourseOperationsTestData.VARIOUS_IDS_COURSES_COUNT, result.size(),
-            "Should return all courses");
+                "Should return all courses");
     }
 
     // ============== collectNonNullDescriptions Tests ==============
@@ -523,7 +529,7 @@ class CourseOperationsImplTest {
         List<String> result = courseOperations.collectNonNullDescriptions(courses);
 
         assertEquals(CourseOperationsTestData.NULL_DESCRIPTIONS_NON_NULL_COUNT, result.size(),
-            "Should have correct number of non-null descriptions");
+                "Should have correct number of non-null descriptions");
         assertTrue(result.stream().allMatch(Objects::nonNull), "All descriptions should be non-null");
     }
 
