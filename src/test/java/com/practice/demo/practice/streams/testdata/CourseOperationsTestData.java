@@ -1,6 +1,7 @@
 package com.practice.demo.practice.streams.testdata;
 
 import org.openapitools.model.GetCoursePayload;
+import org.openapitools.model.GetLessonReducedPayload;
 import org.openapitools.model.LessonPayload;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class CourseOperationsTestData {
     public static final long VARYING_LESSONS_MIN_5_COUNT = 2; // 5 and 10
 
     // Pattern matching courses expected values
-    public static final int PATTERN_MATCHING_JAVA_COUNT = 3; // Java Basics, Advanced Java, Java Web Development
+    public static final int PATTERN_MATCHING_JAVA_COUNT = 4; // Java Basics, Advanced Java, Java Web Development
 
     // Long titles courses expected values
     public static final int LONGEST_TITLE_LENGTH = 65;
@@ -76,12 +77,12 @@ public class CourseOperationsTestData {
     /**
      * Creates a list of lessons
      */
-    private static List<LessonPayload> createLessons(int count) {
-        List<LessonPayload> lessons = new ArrayList<>();
+    private static List<GetLessonReducedPayload> createLessons(int count) {
+        List<GetLessonReducedPayload> lessons = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
-            LessonPayload lesson = new LessonPayload();
+            GetLessonReducedPayload lesson = new GetLessonReducedPayload();
             lesson.setId((long) i);
-            lesson.setTitle("Lesson " + i);
+            lesson.setName("Lesson " + i);
             lessons.add(lesson);
         }
         return lessons;
