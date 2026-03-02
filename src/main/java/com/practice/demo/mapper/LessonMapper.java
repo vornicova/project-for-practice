@@ -1,23 +1,35 @@
 package com.practice.demo.mapper;
 
 import com.practice.demo.entity.LessonEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.openapitools.model.CreateLessonPayload;
 import org.openapitools.model.GetLessonPayload;
 import org.openapitools.model.UpdateLessonPayload;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface LessonMapper {
+@Component
+public class LessonMapper {
 
-    @Mapping(target = "courseId", source = "course.id")
-    GetLessonPayload toPayload(LessonEntity entity);
+    public GetLessonPayload toPayload(LessonEntity entity) {
+        return new GetLessonPayload()
+                .id(entity.getId())
+                .name(entity.getName())
+                .isActive(entity.getIsActive())
+                .courseId(entity.getCourse() != null ? entity.getCourse().getId() : null);
+    }
 
-    @Mapping(target = "course", ignore = true)
-    LessonEntity toEntity(CreateLessonPayload payload);
+    public LessonEntity toEntity(CreateLessonPayload payload) {
+        return LessonEntity.builder()
+                .name(payload.getName())
+                .isActive(true)
+                .build();
+    }
 
-    @Mapping(target = "course", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    void updateEntity(UpdateLessonPayload payload, @MappingTarget LessonEntity entity);
+    public void updateEntity(UpdateLessonPayload payload, LessonEntity entity) {
+        if (payload.getName() != null) {
+            entity.setName(payload.getName());
+        }
+        if (payload.getIsActive() != null) {
+            entity.setIsActive(payload.getIsActive());
+        }
+    }
 }

@@ -19,11 +19,12 @@ public class TestServiceImpl implements TestService {
 
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
+    private final TestMapper testMapper;
 
     @Override
     @Transactional
     public Long createTest(CreateTestDTO dto) {
-        TestEntity test = TestMapper.toEntity(dto);
+        TestEntity test = testMapper.toEntity(dto);
         testRepository.save(test);
         return test.getId();
     }
@@ -33,7 +34,7 @@ public class TestServiceImpl implements TestService {
     public GetTestDTO getTestById(Long id) {
         TestEntity test = testRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Test not found"));
-        return TestMapper.toGetTestDTO(test);
+        return testMapper.toGetTestDTO(test);
     }
 
     @Override

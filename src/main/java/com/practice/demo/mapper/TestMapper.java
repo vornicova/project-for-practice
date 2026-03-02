@@ -1,12 +1,17 @@
 package com.practice.demo.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.openapitools.model.CreateTestDTO;
 import org.openapitools.model.GetTestDTO;
 import com.practice.demo.entity.TestEntity;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class TestMapper {
+    private final QuestionMapper questionMapper;
 
-    public static TestEntity toEntity(CreateTestDTO dto) {
+    public TestEntity toEntity(CreateTestDTO dto) {
         return TestEntity.builder()
                 .title(dto.getName())
                 .description(dto.getDescription())
@@ -14,13 +19,13 @@ public class TestMapper {
                 .build();
     }
 
-    public static GetTestDTO toGetTestDTO(TestEntity entity) {
+    public GetTestDTO toGetTestDTO(TestEntity entity) {
         GetTestDTO dto = new GetTestDTO();
         dto.setName(entity.getTitle());
         dto.setDescription(entity.getDescription());
         dto.setQuestions(
                 entity.getQuestions().stream()
-                        .map(QuestionMapper::toGetQuestionDTO)
+                        .map(questionMapper::toGetQuestionDTO)
                         .toList()
         );
         return dto;

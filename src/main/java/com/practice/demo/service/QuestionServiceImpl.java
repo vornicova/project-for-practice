@@ -14,11 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
+    private final QuestionMapper questionMapper;
 
     @Override
     @Transactional
     public Long createQuestion(CreateQuestionDTO dto) {
-        QuestionEntity question = QuestionMapper.toEntity(dto);
+        QuestionEntity question = questionMapper.toEntity(dto);
         questionRepository.save(question);
         return question.getId();
     }
@@ -27,7 +28,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional
     public List<Long> createQuestionsBulk(List<CreateQuestionDTO> dtos) {
         List<QuestionEntity> questions = dtos.stream()
-                .map(QuestionMapper::toEntity)
+                .map(questionMapper::toEntity)
                 .toList();
         questionRepository.saveAll(questions);
         return questions.stream().map(QuestionEntity::getId).toList();

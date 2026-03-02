@@ -3,9 +3,7 @@ package com.practice.demo.service;
 import org.openapitools.model.CreateTestDTO;
 import org.openapitools.model.GetTestDTO;
 
-
 import java.util.List;
-
 
 public interface TestService {
 
