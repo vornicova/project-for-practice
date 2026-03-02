@@ -1,0 +1,5 @@
+CREATE TABLE t_questions
+(
+    id   BIGSERIAL PRIMARY KEY,
+    text VARCHAR NOT NULL
+);

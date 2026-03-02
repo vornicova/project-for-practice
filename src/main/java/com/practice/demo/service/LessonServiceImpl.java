@@ -21,13 +21,13 @@ public class LessonServiceImpl implements LessonService {
 
     private final LessonRepository repository;
     private final CourseRepository courseRepository;
-    private final LessonMapper mapper;
+    private final LessonMapper lessonMapper;
 
     @Override
     public GetLessonPayload getById(Long id) {
         LessonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new LessonNotFoundException(id));
-        return mapper.toPayload(entity);
+        return lessonMapper.toPayload(entity);
     }
 
     @Override
@@ -36,11 +36,11 @@ public class LessonServiceImpl implements LessonService {
         CourseEntity course = courseRepository.findById(payload.getCourseId())
                 .orElseThrow(() -> new CourseNotFoundException(payload.getCourseId()));
 
-        LessonEntity entity = mapper.toEntity(payload);
+        LessonEntity entity = lessonMapper.toEntity(payload);
         entity.setCourse(course);
         entity.setIsActive(true);
 
-        return mapper.toPayload(repository.save(entity));
+        return lessonMapper.toPayload(repository.save(entity));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class LessonServiceImpl implements LessonService {
         LessonEntity entity = repository.findById(id)
                 .orElseThrow(() -> new LessonNotFoundException(id));
 
-        mapper.updateEntity(payload, entity);
+        lessonMapper.updateEntity(payload, entity);
 
         if (payload.getCourseId() != null &&
                 !payload.getCourseId().equals(entity.getCourse().getId())) {
@@ -60,7 +60,7 @@ public class LessonServiceImpl implements LessonService {
             entity.setCourse(course);
         }
 
-        return mapper.toPayload(entity);
+        return lessonMapper.toPayload(entity);
     }
 
     @Override
