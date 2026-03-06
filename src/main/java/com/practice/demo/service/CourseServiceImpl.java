@@ -1,11 +1,9 @@
 package com.practice.demo.service;
 
 import com.practice.demo.entity.CourseEntity;
-import com.practice.demo.entity.LessonEntity;
 import com.practice.demo.exception.CourseNotFoundException;
 import com.practice.demo.mapper.CourseMapper;
 import com.practice.demo.repository.CourseRepository;
-import com.practice.demo.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.CreateCoursePayload;
 import org.openapitools.model.GetCoursePayload;
