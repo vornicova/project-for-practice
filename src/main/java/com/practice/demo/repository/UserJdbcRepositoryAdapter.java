@@ -1,18 +1,17 @@
 package com.practice.demo.repository;
 
 import com.practice.demo.entity.UserEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 @ConditionalOnProperty(
         name = "repository.type",
         havingValue = "jdbc"
@@ -22,8 +21,8 @@ public class UserJdbcRepositoryAdapter implements UserRepository {
     private static final String INSERT_SQL = """
             INSERT INTO t_users (first_name, last_name, is_active, email)
             VALUES (?, ?, ?, ?)
+            RETURNING id
             """;
-
     private static final String FIND_BY_ID_SQL = """
             SELECT id, first_name, last_name, is_active, email
             FROM t_users
@@ -46,29 +45,17 @@ public class UserJdbcRepositoryAdapter implements UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public UserJdbcRepositoryAdapter(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
     @Override
     public UserEntity save(UserEntity user) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(INSERT_SQL, new String[]{"id"});
-            ps.setString(1, user.getFirstName());
-            ps.setString(2, user.getLastName());
-            ps.setObject(3, user.getIsActive());
-            ps.setString(4, user.getEmail());
-            return ps;
-        }, keyHolder);
-
-        Number generatedId = keyHolder.getKey();
-        if (generatedId == null) {
-            throw new IllegalStateException("Failed to retrieve generated id for user");
-        }
-
-        user.setId(generatedId.longValue());
+        Long id = jdbcTemplate.queryForObject(
+                INSERT_SQL,
+                Long.class,
+                user.getFirstName(),
+                user.getLastName(),
+                user.getIsActive(),
+                user.getEmail()
+        );
+        user.setId(id);
         return user;
     }
 

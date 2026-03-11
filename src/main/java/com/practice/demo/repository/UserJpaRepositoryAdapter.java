@@ -1,6 +1,7 @@
 package com.practice.demo.repository;
 
 import com.practice.demo.entity.UserEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 @ConditionalOnProperty(
         name = "repository.type",
         havingValue = "jpa",
@@ -16,10 +18,6 @@ import java.util.Optional;
 public class UserJpaRepositoryAdapter implements UserRepository {
 
     private final UserJpaSpringDataRepository repo;
-
-    public UserJpaRepositoryAdapter(UserJpaSpringDataRepository repo) {
-        this.repo = repo;
-    }
 
     @Override
     public UserEntity save(UserEntity user) {
